@@ -1,0 +1,20 @@
+{
+  "name": "ajvfun",
+  "version": "1.0.0",
+  "description": "trying out Ajv for needs of schems support with the FID/FAST integration",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/App.js",
+    "prestart": "npm run build",
+    "tsc": "tsc",
+    "build": "tsc"
+  },
+  "author": "Noah Herron",
+  "license": "ISC",
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1",
+    "typescript": "^5.2.2"
+  }
+}
