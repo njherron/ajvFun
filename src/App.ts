@@ -6,7 +6,7 @@ validator.basicValidation(validator.goodData);
 validator.basicValidation(validator.badData);
 
 const data: unknown = {
-    endDate: '2023-10-05',
+    endDate: '10-05-2024',
     fastAccountingId: 1234,
     fastAccountingName: 'This is the name of the Account.',
     fidUserEmail: 'bigJohn@email.com',

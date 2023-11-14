@@ -9,9 +9,141 @@ The hope is that Ajv will be useful in data schema validation.
 == Needs
 The data passed from one app to the other will need to include type validation as well as limiting values for specific dates.
 The schema validation should mirror the existing form validation for the destination of this data.
+There are upper limits for particular line items that the validation needs to account for.
+
+
 
 === Keywords
 Refer to this https://ajv.js.org/keywords.html[link] for more information on user defined keywords.
 
 Keywords can be used to extend the base validation Ajv provides.
 This these are a good candidate for providing the custom validation of dates we need to support our future work.
+
+
+== Example Object
+
+This object is mainly based off of a provided excel spreadsheet that describes the available data and mapping rules.
+**This may not be representative of the actual object being sent over HTTP**.
+
+[source,json]
+----
+{
+    "endDate": "5/4/2021",
+    "fastAccountId": 5678,
+    "fastAccountName": "Accounting Name 0",
+    "fidUserEmail": "bigJohn@email.com",
+    "fidUserName": "bigJohn",
+    "fileNumber": 1234,
+    "lastUpdatedDate": "10/30/2023",
+    "monetaryRecord": {
+        "assets": {
+            "bonds": [
+            {
+                "amount": 654.45,
+                "serialNumber": "123456ASDF"
+            }
+            ],
+            "cds": [
+                1234.43,
+                456.34,
+                6456.34
+            ],
+            "checking": [
+                1234.52,
+                6234.34,
+                363.34
+            ],
+            "other": [
+                {
+                "amount": 534.45,
+                "description": "some other asset"
+                }
+            ],
+            "savings": [
+                2345.53,
+                345634.34
+            ]
+        },
+        "expenses": {
+            "spending": [
+                {
+                "amount": 234.23,
+                "description": "I like to spend money"
+                },
+                {
+                "amount": 3234.23,
+                "description": "I like to spend money a lot"
+                }
+            ],
+            "summary": {
+                "clothing": 5534.34,
+                "dependentSupport": 3456.23,
+                "entertainment": 6456.34,
+                "fiduciaryFee": 34.34,
+                "personal": 645.34,
+                "roomAndBoard": 3453.54
+            }
+        },
+        "income": {
+            "deposits": [
+                1234.23,
+                345.34
+            ],
+            "lumpSum": [
+                345.34,
+                346.23,
+                478.45
+            ],
+            "otherIncome": [
+                {
+                    "amount": 10.0,
+                    "description": "happy birthday"
+                },
+                {
+                    "amount": 14.32,
+                    "description": "this is free text"
+                }
+            ],
+            "receivedFromSs": [
+                {
+                    "monthlyAmount": 23.45,
+                    "months": 6
+                },
+                {
+                    "monthlyAmount": 42.23,
+                    "months": 3
+                }
+            ],
+            "receivedFromVa": [
+                {
+                    "monthlyAmount": 10.0,
+                    "months": 6
+                },
+                {
+                    "monthlyAmount": 14.32,
+                    "months": 6
+                }
+            ]
+        }
+    },
+    "startDate": "4/3/2021",
+    "statingBalance": 1000.0,
+    "submittedDate" : "7/4/2021"
+}
+----
+
+== Usage
+This is a npm/node application and has a provided `package.json` file.
+After cloning the repo and navigating to the repo's root dir you should run the following command to install the node app and it's dependencies.
+[srouce, bash]
+----
+$ npm i
+----
+
+After installation you should run the following command to build and execute this application.
+[source,bash]
+----
+$ npm run start
+----
+
+The application should build and start providing output for the schema validation it performs.

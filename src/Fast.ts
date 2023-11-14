@@ -1,5 +1,5 @@
 
-export interface FastRecordSchema {
+export interface FastMonetaryRecord {
     assets: {
         bonds: {amount: number, serialNumber: string;}[];
         cds: number[];
@@ -26,7 +26,7 @@ export interface FastRecordSchema {
         receivedFromVa: {monthlyAmount: number, months: number;}[];
     };
 }
-export interface FastSchema {
+export interface FastRecord {
     endDate: string;
     fastAccountingId: number;
     fastAccountingName: string;
@@ -34,7 +34,7 @@ export interface FastSchema {
     fidUserName: string;
     fileNumber: number;
     lastUpdatedDate: string;
-    monetaryRecord: FastRecordSchema;
+    monetaryRecord: FastMonetaryRecord;
     startDate: string;
     startingBalance: number;
     submittedDate: string;

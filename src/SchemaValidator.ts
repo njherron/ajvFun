@@ -1,6 +1,7 @@
 import Ajv, {_, Code, ErrorObject, JSONSchemaType, KeywordCxt} from "ajv";
 import addFormats from 'ajv-formats'
-import {FastRecordSchema, FastSchema} from "./FastSchema";
+import ajvErrors from 'ajv-errors'
+import {FastMonetaryRecord, FastRecord} from "./Fast";
 
 export class SchemaValidator {
 
@@ -14,7 +15,7 @@ export class SchemaValidator {
         bar: 1
     };
 
-    fastRecordSchema: JSONSchemaType<FastRecordSchema> = {
+    fastRecordSchema: JSONSchemaType<FastMonetaryRecord> = {
         type: "object",
         properties: {
             assets: {
@@ -106,7 +107,20 @@ export class SchemaValidator {
                             properties: {
                                 amount: {type: 'number'},
                                 description: {type: 'string'}
-                            }
+                            },
+                            maxItems: 100
+                        }
+                    },
+                    otherInterest: {
+                        type: 'array',
+                        items: {
+                            type: 'object',
+                            required:[],
+                            properties: {
+                                amount: {type: 'number'},
+                                description: {type: 'string'}
+                            },
+                            maxItems: 100
                         }
                     },
                     receivedFromSs: {
@@ -116,7 +130,7 @@ export class SchemaValidator {
                             required:[],
                             properties: {
                                 monthlyAmount: {type: 'number'},
-                                months: {type: 'integer'}
+                                months: {type: 'integer', maximum: 99}
                             }
                         }
                     },
@@ -128,7 +142,8 @@ export class SchemaValidator {
                             properties: {
                                 monthlyAmount: {type: 'number'},
                                 months: {type: 'integer'}
-                            }
+                            },
+                            maxItems: 100
                         }
                     }
                 }
@@ -139,7 +154,7 @@ export class SchemaValidator {
         additionalProperties: false
     };
     //
-    fastSchema: JSONSchemaType<FastSchema> = {
+    fastSchema: JSONSchemaType<FastRecord> = {
         type: 'object',
         required:[
             "endDate",
@@ -157,9 +172,18 @@ export class SchemaValidator {
         properties: {
             endDate: {
                 type: 'string',
-                format: 'date',
-                pastDate: '$NOW$',
-                after: '$startDate'
+                // errorMessages: {
+                //     pastDate: 'blah',
+                //     after: 'aasdf'
+                // },
+                allOf: [ //provides order of validation
+                    {format: 'date'},
+                    {pastDate: '$NOW$'},
+                    {after: '$startDate'}
+                ],
+                // errorMessage: {
+                //     pastDate: 'this is custom ${/endDate}'
+                // }
             },
             fastAccountingId: {
                 type: 'integer'
@@ -194,6 +218,11 @@ export class SchemaValidator {
                 format: 'date'
             }
         },
+        // errorMessage: {
+        //     pastDate: {
+        //         endDate: 'this is custom ${/endDate}'
+        //     }
+        // }
         // pastDate: ['startDate', 'endDate']
     };
 
@@ -206,8 +235,9 @@ export class SchemaValidator {
 
 
     constructor() {
-        this.ajv = new Ajv();
+        this.ajv = new Ajv({allErrors: true});
         addFormats(this.ajv);
+        ajvErrors(this.ajv);
         this.addKeywords();
     }
 
@@ -263,10 +293,10 @@ export class SchemaValidator {
             keyword: 'after',
             validate: (schema, data, parentSchema) => {
                 if (!schema) return false;
-                //check schema for what property of the parent scope we are asserting data is before
-                //assert data is before property in schema
+                //check schema for what property of the parent scope we are asserting data is after
+                //assert data is after property in schema
                 //return assertion
-                return false;
+                return true;
             }
         })
     }
