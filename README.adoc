@@ -20,12 +20,12 @@ Keywords can be used to extend the base validation Ajv provides.
 This these are a good candidate for providing the custom validation of dates we need to support our future work.
 
 
-== Example Object
+== Example Objects
 
+=== v 0.1
 This object is mainly based off of a provided excel spreadsheet that describes the available data and mapping rules.
 **This may not be representative of the actual object being sent over HTTP**.
 
-=== v 0.1
 [source,json]
 ----
 {
@@ -126,6 +126,146 @@ This object is mainly based off of a provided excel spreadsheet that describes t
                 }
             ]
         }
+    },
+    "startDate": "2020-04-03",
+    "statingBalance": 1000.0,
+    "submittedDate" : "2021-04-07"
+}
+----
+
+=== v 0.2
+After discussion with the FAST development team it sounds like they want to use polymorphism to define the contents of properties in the object.
+For example the `assets` property would be a list of objects each defining their `type`.
+The same would be true for the `income` property of link:#_v_0_1[v 0.1].
+Depending on the type they would have different properties.
+
+[source,json]
+----
+{
+    "endDate": "2021-05-04",
+    "fastAccountId": 5678,
+    "fastAccountName": "Accounting Name 0",
+    "fidUserEmail": "bigJohn@email.com",
+    "fidUserName": "bigJohn",
+    "fileNumber": 1234,
+    "lastUpdatedDate": "2023-10-31",
+    "monetaryRecord": {
+        "assets": [
+            {
+                "type" : "bond",
+                "amount": 654.45,
+                "serialNumber": "123456ASDF"
+            },
+            {
+                "type" : "cd",
+                "amount": 1234.43
+            },
+            {
+                "type" : "cd",
+                "amount": 456.34
+            },
+            {
+                "type" : "cd",
+                "amount": 6456.34
+            },
+            {
+                "type" : "checking",
+                "amount": 1234.52
+            },
+            {
+                "type" : "checking",
+                "amount": 6234.34
+            },
+            {
+                "type" : "checking",
+                "amount": 363.34
+            },
+            {
+                "type" : "other",
+                "amount": 534.45,
+                "description": "some other asset"
+            },
+            {
+                "type" : "savings",
+                "amount": 2345.53
+            },
+            {
+                "type" : "savings",
+                "amount": 345634.34
+            }
+        ],
+        "expenses": {
+            "spending": [
+                {
+                    "amount": 234.23,
+                    "description": "I like to spend money"
+                },
+                {
+                    "amount": 3234.23,
+                    "description": "I like to spend money a lot"
+                }
+            ],
+            "summary": {
+                "clothing": 5534.34,
+                "dependentSupport": 3456.23,
+                "entertainment": 6456.34,
+                "fiduciaryFee": 34.34,
+                "personal": 645.34,
+                "roomAndBoard": 3453.54
+            }
+        },
+        "income": [
+            {
+                "type": "deposit",
+                "amount": 1234.23
+            },
+            {
+                "type": "deposit",
+                "amount": 345.34
+            },
+            {
+                "type": "lumpSum",
+                "amount": 345.34
+            },
+            {
+                "type": "lumpSum",
+                "amount": 346.23
+            },
+            {
+                "type": "lumpSum",
+                "amount": 478.45
+            },
+            {
+                "type": "otherIncome",
+                "amount": 10.0,
+                "description": "happy birthday"
+            },
+            {
+                "type": "otherIncome",
+                "amount": 14.32,
+                "description": "this is free text"
+            },
+            {
+                "type": "receivedFromSs",
+                "monthlyAmount": 23.45,
+                "months": 6
+            },
+            {
+                "type": "receivedFromSs",
+                "monthlyAmount": 42.23,
+                "months": 3
+            },
+            {
+                "type": "receivedFromVa",
+                "monthlyAmount": 10.0,
+                "months": 6
+            },
+            {
+                "type": "receivedFromVa",
+                "monthlyAmount": 14.32,
+                "months": 6
+            }
+        ]
     },
     "startDate": "2020-04-03",
     "statingBalance": 1000.0,
