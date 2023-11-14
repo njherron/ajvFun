@@ -1,0 +1,17 @@
+= ajvFun
+:toc:
+
+== Overview
+This is a sample project to explore the possibility of using Ajv as a schema validation tool.
+There is future work that will require integration between two system so data validation is required.
+The hope is that Ajv will be useful in data schema validation.
+
+== Needs
+The data passed from one app to the other will need to include type validation as well as limiting values for specific dates.
+The schema validation should mirror the existing form validation for the destination of this data.
+
+=== Keywords
+Refer to this https://ajv.js.org/keywords.html[link] for more information on user defined keywords.
+
+Keywords can be used to extend the base validation Ajv provides.
+This these are a good candidate for providing the custom validation of dates we need to support our future work.
