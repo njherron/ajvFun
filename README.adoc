@@ -133,19 +133,21 @@ This object is mainly based off of a provided excel spreadsheet that describes t
 ----
 
 == Usage
+IMPORTANT: This is a Node.js application and requires npm and node to run.
+
 This is a npm/node application and has a provided `package.json` file.
-After cloning the repo and navigating to the repo's root dir you should run the following command to install the node app and it's dependencies.
+After cloning the repo and navigating to the repo's root directory via your terminal you should run the following command to install the node app and it's dependencies.
 
 [source, bash]
 ----
-$ npm i
+npm i
 ----
 
-After installation you should run the following command to build and execute this application.
+After installation you should run the following command in your terminal to build and execute this application.
 
 [source, bash]
 ----
-$ npm run start
+npm run start
 ----
 
-The application should build and start providing output for the schema validation it performs.
+The application should build and start providing output to the terminal for the schema validation it performs.
