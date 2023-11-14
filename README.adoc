@@ -25,23 +25,24 @@ This these are a good candidate for providing the custom validation of dates we 
 This object is mainly based off of a provided excel spreadsheet that describes the available data and mapping rules.
 **This may not be representative of the actual object being sent over HTTP**.
 
+=== v 0.1
 [source,json]
 ----
 {
-    "endDate": "5/4/2021",
+    "endDate": "2021-05-04",
     "fastAccountId": 5678,
     "fastAccountName": "Accounting Name 0",
     "fidUserEmail": "bigJohn@email.com",
     "fidUserName": "bigJohn",
     "fileNumber": 1234,
-    "lastUpdatedDate": "10/30/2023",
+    "lastUpdatedDate": "2023-10-31",
     "monetaryRecord": {
         "assets": {
             "bonds": [
-            {
-                "amount": 654.45,
-                "serialNumber": "123456ASDF"
-            }
+                {
+                    "amount": 654.45,
+                    "serialNumber": "123456ASDF"
+                }
             ],
             "cds": [
                 1234.43,
@@ -55,8 +56,8 @@ This object is mainly based off of a provided excel spreadsheet that describes t
             ],
             "other": [
                 {
-                "amount": 534.45,
-                "description": "some other asset"
+                    "amount": 534.45,
+                    "description": "some other asset"
                 }
             ],
             "savings": [
@@ -67,12 +68,12 @@ This object is mainly based off of a provided excel spreadsheet that describes t
         "expenses": {
             "spending": [
                 {
-                "amount": 234.23,
-                "description": "I like to spend money"
+                    "amount": 234.23,
+                    "description": "I like to spend money"
                 },
                 {
-                "amount": 3234.23,
-                "description": "I like to spend money a lot"
+                    "amount": 3234.23,
+                    "description": "I like to spend money a lot"
                 }
             ],
             "summary": {
@@ -126,9 +127,9 @@ This object is mainly based off of a provided excel spreadsheet that describes t
             ]
         }
     },
-    "startDate": "4/3/2021",
+    "startDate": "2020-04-03",
     "statingBalance": 1000.0,
-    "submittedDate" : "7/4/2021"
+    "submittedDate" : "2021-04-07"
 }
 ----
 
