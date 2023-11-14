@@ -1,7 +1,8 @@
 import Ajv, {_, Code, ErrorObject, JSONSchemaType, KeywordCxt} from "ajv";
 import addFormats from 'ajv-formats'
 import ajvErrors from 'ajv-errors'
-import {FastMonetaryRecord, FastRecord} from "./Fast";
+import {FastMonetaryRecordV01, FastRecordV01} from "./Fast";
+import {error} from "ajv/dist/vocabularies/applicator/dependencies";
 
 export class SchemaValidator {
 
@@ -15,7 +16,7 @@ export class SchemaValidator {
         bar: 1
     };
 
-    fastRecordSchema: JSONSchemaType<FastMonetaryRecord> = {
+    fastRecordSchema: JSONSchemaType<FastMonetaryRecordV01> = {
         type: "object",
         properties: {
             assets: {
@@ -108,8 +109,8 @@ export class SchemaValidator {
                                 amount: {type: 'number'},
                                 description: {type: 'string'}
                             },
-                            maxItems: 100
-                        }
+                        },
+                        maxItems: 100
                     },
                     otherInterest: {
                         type: 'array',
@@ -120,8 +121,8 @@ export class SchemaValidator {
                                 amount: {type: 'number'},
                                 description: {type: 'string'}
                             },
-                            maxItems: 100
-                        }
+                        },
+                        maxItems: 100
                     },
                     receivedFromSs: {
                         type: 'array',
@@ -143,8 +144,8 @@ export class SchemaValidator {
                                 monthlyAmount: {type: 'number'},
                                 months: {type: 'integer'}
                             },
-                            maxItems: 100
-                        }
+                        },
+                        maxItems: 100
                     }
                 }
             }
@@ -154,7 +155,7 @@ export class SchemaValidator {
         additionalProperties: false
     };
     //
-    fastSchema: JSONSchemaType<FastRecord> = {
+    fastSchema: JSONSchemaType<FastRecordV01> = {
         type: 'object',
         required:[
             "endDate",
@@ -218,11 +219,11 @@ export class SchemaValidator {
                 format: 'date'
             }
         },
-        // errorMessage: {
-        //     pastDate: {
-        //         endDate: 'this is custom ${/endDate}'
-        //     }
-        // }
+        errorMessage: {
+            properties: {
+                endDate: 'this is custom ${/endDate}'
+            }
+        },
         // pastDate: ['startDate', 'endDate']
     };
 
@@ -306,6 +307,19 @@ export class SchemaValidator {
         let valid = validate(data);
         console.log(`Is valid: ${valid}`);
         if (!valid) {
+            const errors = validate.errors;
+            if (errors && errors.length > 0) {
+                for (const errorsKey of errors) {
+                    if (errorsKey.keyword === 'errorMessage') {
+                        console.log(errorsKey.message);
+                        if (errorsKey.params.errors && errorsKey.params.errors.length > 0) {
+                            for (const error of errorsKey.params.errors) {
+                                console.log(`Validation failed for ${error.instancePath} due to ${error.keyword}`);
+                            }
+                        }
+                    }
+                }
+            }
             console.log(validate.errors);
         }
     }
