@@ -135,13 +135,15 @@ This object is mainly based off of a provided excel spreadsheet that describes t
 == Usage
 This is a npm/node application and has a provided `package.json` file.
 After cloning the repo and navigating to the repo's root dir you should run the following command to install the node app and it's dependencies.
-[srouce, bash]
+
+[source, bash]
 ----
 $ npm i
 ----
 
 After installation you should run the following command to build and execute this application.
-[source,bash]
+
+[source, bash]
 ----
 $ npm run start
 ----
