@@ -136,7 +136,7 @@ This object is mainly based off of a provided excel spreadsheet that describes t
 === v 0.2
 After discussion with the FAST development team it sounds like they want to use polymorphism to define the contents of properties in the object.
 For example the `assets` property would be a list of objects each defining their `type`.
-The same would be true for the `income` property of link:#_v_0_1[v 0.1].
+The same would be true for the `income` property of link:#v-01[v 0.1].
 Depending on the type they would have different properties.
 
 [source,json]
