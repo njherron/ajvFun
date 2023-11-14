@@ -260,7 +260,7 @@ export class SchemaValidator {
         });
 
         this.ajv.addKeyword({
-            keyword: 'before',
+            keyword: 'after',
             validate: (schema, data, parentSchema) => {
                 if (!schema) return false;
                 //check schema for what property of the parent scope we are asserting data is before
