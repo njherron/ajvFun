@@ -1,8 +1,10 @@
-import Ajv, {_, Code, ErrorObject, JSONSchemaType, KeywordCxt} from "ajv";
+import Ajv, {_, Code, ErrorObject, JSONSchemaType, KeywordCxt, ValidateFunction} from "ajv";
 import addFormats from 'ajv-formats'
 import ajvErrors from 'ajv-errors'
-import {FastMonetaryRecordV01, FastRecordV01} from "./Fast";
+import {FastMonetaryRecordV01, FastRecordV01} from "./FastModels";
 import {error} from "ajv/dist/vocabularies/applicator/dependencies";
+import {DataValidateFunction, DataValidationCxt} from "ajv/dist/types";
+import {fastSchemaV01} from "./Schemas";
 
 export class SchemaValidator {
 
@@ -16,224 +18,7 @@ export class SchemaValidator {
         bar: 1
     };
 
-    fastRecordSchema: JSONSchemaType<FastMonetaryRecordV01> = {
-        type: "object",
-        properties: {
-            assets: {
-                type: 'object',
-                required:[],
-                properties: {
-                    bonds: {
-                        type: 'array',
-                        items: {
-                            type: 'object',
-                            required:[],
-                            properties: {
-                                amount: {type: 'number'},
-                                serialNumber: {type: 'string'}
-                            }
-                        }
-                    },
-                    cds: {
-                        type: 'array',
-                        items: { type: 'number'}
-                    },
-                    checking: {
-                        type: 'array',
-                        items: { type: 'number'}
-                    },
-                    other: {
-                        type: 'array',
-                        items: {
-                            type: 'object',
-                            required:[],
-                            properties: {
-                                amount: {type: 'number'},
-                                description: {type: 'string'}
-                            }
-                        }
-                    },
-                    savings: {
-                        type: 'array',
-                        items: { type: 'number'}
-                    },
-                }
-            },
-            expenses: {
-                type: 'object',
-                required:[],
-                properties: {
-                    spending: {
-                        type: 'array',
-                        items: {
-                            type: 'object',
-                            required:[],
-                            properties: {
-                                amount: {type: 'number'},
-                                description: {type: 'string'}
-                            }
-                        }
-                    },
-                    summary: {
-                        type: 'object',
-                        required:[],
-                        properties: {
-                            clothing: {type: 'number'},
-                            dependentSupport: {type: 'number'},
-                            entertainment: {type: 'number'},
-                            fiduciaryFee: {type: 'number'},
-                            personal: {type: 'number'},
-                            roomAndBoard: {type: 'number'}
-                        }
-                    }
-                }
-            },
-            income: {
-                type: 'object',
-                required:[],
-                properties: {
-                    deposits: {
-                        type: 'array',
-                        items: {type: 'number'}
-                    },
-                    lumpSum: {
-                        type: 'array',
-                        items: {type: 'number'}
-                    },
-                    otherIncome: {
-                        type: 'array',
-                        items: {
-                            type: 'object',
-                            required:[],
-                            properties: {
-                                amount: {type: 'number'},
-                                description: {type: 'string'}
-                            },
-                        },
-                        maxItems: 100
-                    },
-                    otherInterest: {
-                        type: 'array',
-                        items: {
-                            type: 'object',
-                            required:[],
-                            properties: {
-                                amount: {type: 'number'},
-                                description: {type: 'string'}
-                            },
-                        },
-                        maxItems: 100
-                    },
-                    receivedFromSs: {
-                        type: 'array',
-                        items: {
-                            type: 'object',
-                            required:[],
-                            properties: {
-                                monthlyAmount: {type: 'number'},
-                                months: {type: 'integer', maximum: 99}
-                            }
-                        }
-                    },
-                    receivedFromVa: {
-                        type: 'array',
-                        items: {
-                            type: 'object',
-                            required:[],
-                            properties: {
-                                monthlyAmount: {type: 'number'},
-                                months: {type: 'integer'}
-                            },
-                        },
-                        maxItems: 100
-                    }
-                }
-            }
-        },
-        // required: ["assets", "expenses", "income"],
-        required: [],
-        additionalProperties: false
-    };
-    //
-    fastSchema: JSONSchemaType<FastRecordV01> = {
-        type: 'object',
-        required:[
-            "endDate",
-            "fastAccountingId",
-            "fastAccountingName",
-            "fidUserEmail",
-            "fidUserName",
-            "fileNumber",
-            "lastUpdatedDate",
-            // "monetaryRecord",
-            "startDate",
-            "startingBalance",
-            "submittedDate"
-        ],
-        properties: {
-            endDate: {
-                type: 'string',
-                // errorMessages: {
-                //     pastDate: 'blah',
-                //     after: 'aasdf'
-                // },
-                allOf: [ //provides order of validation
-                    {format: 'date'},
-                    {pastDate: '$NOW$'},
-                    {after: '$startDate'}
-                ],
-                // errorMessage: {
-                //     pastDate: 'this is custom ${/endDate}'
-                // }
-            },
-            fastAccountingId: {
-                type: 'integer'
-            },
-            fastAccountingName: {
-                type: 'string'
-            },
-            fidUserEmail: {
-                type: 'string'
-            },
-            fidUserName: {
-                type: 'string'
-            },
-            fileNumber: {
-                type: 'integer'
-            },
-            lastUpdatedDate: {
-                type: 'string',
-                format: 'date'
-            },
-            monetaryRecord: this.fastRecordSchema,
-            startDate: {
-                type: 'string',
-                format: 'date',
-                pastDate: '$NOW$'
-            },
-            startingBalance: {
-                type: 'number'
-            },
-            submittedDate: {
-                type: 'string',
-                format: 'date'
-            }
-        },
-        errorMessage: {
-            properties: {
-                endDate: 'this is custom ${/endDate}'
-            }
-        },
-        // pastDate: ['startDate', 'endDate']
-    };
-
-    // s: JSONSchemaType<FastRecordSchema> = {
-    //     anyOf: [], oneOf: []
-    //
-    // }
-
     private readonly ajv: Ajv;
-
 
     constructor() {
         this.ajv = new Ajv({allErrors: true});
@@ -265,46 +50,58 @@ export class SchemaValidator {
     private addKeywords = () => {
         this.ajv.addKeyword({
             keyword: 'pastDate',
-            validate: (schema, data, parentSchema, dataCxt) => {
-                console.log('in validate');
-                // console.log(schema);
-                // console.log(data);
-                // console.log(parentSchema)
-                // console.log(dataCxt)
-                let d = new Date(data);
-                console.log(d);
-                let today = new Date();
-                let valid = today > d;
-                // if (!valid) {
-                //     let error = {
-                //         keyword: 'pastDate',
-                //         instancePath: dataCxt?.instancePath,
-                //         schemaPath: '',
-                //         message: 'should be before today.',
-                //         params: {keyword: 'pastDate'}
-                //     } as ErrorObject
-                //     validate.errors instanceof Array ? validate.errors.push(error) : validate.errors = [error];
-                // }
-                return valid;
+            validate: (schema, data) => {
+                if (!schema) return false;
+                //todo schema value here should indicate the upper bound of what makes data valid
+                //  for instance if schema == '$NOW$' then we should compare data to the Date representation of
+                //  "right now". schema could also be a static date in the data format, or a path to another schema
+                //  property value?
+                if (schema === '$NOW$') {
+                    let d = new Date(data);
+                    console.log(d);
+                    let today = new Date();
+                    return today > d;
+                }
+                return false;
             },
             errors: true
         });
 
+        /**
+         * The 'after' keyword expects a schema that is a sibling property or a date in full-date format yyyy-mm-dd
+         */
         this.ajv.addKeyword({
             keyword: 'after',
-            validate: (schema, data, parentSchema) => {
+            validate: (schema: string, data, parentSchema, dataCx: DataValidationCxt<string>) => {
                 if (!schema) return false;
                 //check schema for what property of the parent scope we are asserting data is after
+                let valid = true;
+                const token = schema.split('$')
+                if (token.length > 1) {
+                    console.log('checking if after: ' + token[1]);
+                    let lhs = new Date(data);
+                    let rhs = new Date(dataCx.parentData[token[1]]);
+                    valid = lhs > rhs;
+                } else {
+                    console.log('checking if after: ' + schema);
+                    let lhs = new Date(data);
+                    let rhs = new Date(schema);
+                    valid = lhs > rhs;
+                }
+                console.log(schema)
+                console.log(data)
+                console.log(parentSchema)
+                console.log(dataCx.parentData[token[1]])
                 //assert data is after property in schema
                 //return assertion
-                return true;
+                return valid;
             }
         })
     }
 
-    keywordValidation = (data) => {
-        const validate = this.ajv.compile(this.fastSchema);
-        let valid = validate(data);
+    keywordValidation = (data, schema): {valid:boolean, validate:ValidateFunction} => {
+        const validate = this.ajv.compile(schema);
+        const valid = validate(data);
         console.log(`Is valid: ${valid}`);
         if (!valid) {
             const errors = validate.errors;
@@ -322,6 +119,7 @@ export class SchemaValidator {
             }
             console.log(validate.errors);
         }
+        return {valid, validate};
     }
 
     validationFromCodeGeneration = (data) => {
@@ -344,7 +142,7 @@ export class SchemaValidator {
             }
         });
 
-        const validate = this.ajv.compile(this.fastSchema);
+        const validate = this.ajv.compile(fastSchemaV01);
         let valid = validate(data);
         console.log(valid);
         console.log(validate.errors);

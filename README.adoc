@@ -247,22 +247,22 @@ Depending on the type they would have different properties.
             },
             {
                 "type": "receivedFromSs",
-                "monthlyAmount": 23.45,
+                "amount": 23.45,
                 "months": 6
             },
             {
                 "type": "receivedFromSs",
-                "monthlyAmount": 42.23,
+                "amount": 42.23,
                 "months": 3
             },
             {
                 "type": "receivedFromVa",
-                "monthlyAmount": 10.0,
+                "amount": 10.0,
                 "months": 6
             },
             {
                 "type": "receivedFromVa",
-                "monthlyAmount": 14.32,
+                "amount": 14.32,
                 "months": 6
             }
         ]
